@@ -5,14 +5,14 @@ from action.views import apply_rule
 
 
 def check_condition(request):
-    a = {
+    input = {
         "age": 50,
         "usertype": "b2b"
     }
     accepted_conditions = set()
-    accepted_rules = []
-    get_correct_condition(a, accepted_conditions)
+    get_correct_condition(input, accepted_conditions)
     accepted_rules = get_accepted_rules(accepted_conditions)
+    run_action_for_accepted_rules(accepted_rules, input)
 
 
 def get_correct_condition(json_obj, accepted_conditions: set):
@@ -42,8 +42,20 @@ def check_condition_list(rule_condition_s: str, conditions: set):
     return True
 
 
-def run_action_for_accepted_rules(accepted_rules: [Rule]):
+def run_action_for_accepted_rules(accepted_rules: [Rule], user_input):
+    current_price = user_input.price
+    seq = 0
     for rule in accepted_rules:
+        seq += 1
         action = rule.action
         rule_type = rule.rule_type
-        apply_rule(rule_type, 0, action)
+        old_price = current_price
+        current_price = apply_rule(rule_type, current_price, action)
+        print(f"sequencer = {seq}"
+              f"affected rule = {rule.id}"
+              f"rule name = {rule.name}"
+              f"old price = {old_price}"
+              f"new price = {current_price}"
+              f"displacement = {current_price - old_price}"
+              )
+
