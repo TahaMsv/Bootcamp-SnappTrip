@@ -1,7 +1,7 @@
 from condition.models import Condition
 from django.db.models import Q
 from ruleaction.models import Rule
-from action.views import applyRule
+from action.views import apply_rule
 
 
 def check_condition(request):
@@ -46,4 +46,4 @@ def run_action_for_accepted_rules(accepted_rules: [Rule]):
     for rule in accepted_rules:
         action = rule.action
         rule_type = rule.rule_type
-        applyRule()
+        apply_rule(rule_type, 0, action)
