@@ -1,11 +1,16 @@
+from argparse import Action
 from django.shortcuts import render
 
-
 # Create your views here.
-def applyRule(ruleType, oldPrice, f, p, m):
-    newPrice = 0
-    if ruleType == 'D':
-        newPrice = oldPrice - max(f + oldPrice * (p / 100), m)
-    elif ruleType == 'M':
-        newPrice = oldPrice + max(f + oldPrice * (p / 100), m)
-    return newPrice
+def apply_rule(rule_type, old_price, action ):
+    new_price =0 
+    if rule_type =='D':
+        new_price = old_price - max( action.f + old_price * (action.p/100) , action.m)
+    elif rule_type =='M':
+        new_price = old_price + max( action.f + old_price * (action.p/100) , action.m)    
+    return new_price
+
+
+# def addData():
+#     data = Action(0, 10000, 10 , 2000)
+#     data.save()
