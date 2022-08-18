@@ -3,13 +3,36 @@ version: "3.8"
 services:
   djangoapp:
     build: .
+    ports:
+      - "8080:8080"
     expose:
       - 8080
+    restart: always
+
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@admin.com
+      DJANGO_SUPERUSER_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stbootcamp
+
+    command: bash -c "python manage.py initadmin; gunicorn -b 0.0.0.0:8080 --workers 3 snapptrip.wsgi"
 
   djangoapp2:
     build: .
     expose:
       - 8080
+    restart: always
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@admin.com
+      DJANGO_SUPERUSER_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stbootcamp
+
+    command: bash -c "python manage.py makemigrations condition ruleaction condition; python manage.py migrate; python manage.py initadmin; gunicorn -b 0.0.0.0:8080 --workers 3 snapptrip.wsgi"
 
   db:
     image: postgres:14.2
@@ -18,7 +41,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: "stbootcamp"
+      POSTGRES_DB: stbootcamp
 
   lb:
     image: nginx:1.21.6
