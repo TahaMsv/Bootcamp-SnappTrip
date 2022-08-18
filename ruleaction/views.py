@@ -23,7 +23,7 @@ def get_correct_condition(json_obj, accepted_conditions: set):
         accepted_conditions.add(query['condition'])
 
 
-def get_accepted_rules(accepted_condition_list: []):
+def get_accepted_rules(accepted_condition_list: list):
     accepted_rule = []
     for rule in Rule.objects.all():
         is_accepted = check_condition_list(rule.sensitive_condition_list, accepted_condition_list)
